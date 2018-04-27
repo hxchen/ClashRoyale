@@ -13,8 +13,8 @@ cfg.read('config.ini')
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #   服务器 false ;本地 true
-# debug_model = False
-debug_model = True
+debug_model = False
+# debug_model = True
 
 if(debug_model):
     db_host = cfg.get('test_db','db_host')
@@ -25,9 +25,8 @@ if(debug_model):
 else:
     db_host = cfg.get('pro_db','db_host')
     db_user = cfg.get('pro_db','db_user')
-    db_password = cfg.get('pro_db','db_host')
+    db_password = cfg.get('pro_db','db_password')
     db_name = cfg.get('pro_db','db_name')
-
 
 # 请求头信息参数设置
 clan_url = "https://statsroyale.com/clan/8RCCQC"
@@ -356,12 +355,12 @@ def get_data_by_uids():
 
 
 def main():
-    # refresh_clan()
-    # time.sleep(45)
+    refresh_clan()
+    time.sleep(15)
     get_clan2()
-    # refresh_profile("8VJV2CJ9J")
+    # refresh_profile("99220PPR8")
     # refresh_battles("2P0V2CCY")
-    # analytics_profile("8VJV2CJ9J",0)
+    # analytics_profile("99220PPR8",0)
     # get_data_by_uids()
 main()
 
