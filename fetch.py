@@ -13,8 +13,8 @@ cfg.read('config.ini')
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #   服务器 false ;本地 true
-debug_model = False
-# debug_model = True
+# debug_model = False
+debug_model = True
 
 if(debug_model):
     db_host = cfg.get('test_db','db_host')
@@ -154,7 +154,8 @@ def get_clan2():
             elif j == 6:
                 user_dict["donations"] = col.div.string.strip()
             elif j == 7:
-                user_dict["role"] = col.string.strip()
+                if(col.string):
+                    user_dict["role"] = col.string.strip()
         if user_dict["donations"] == 0 or user_dict["crowns"] == 0:
             print("name = " + user_dict["name"] + ",crowns = " + user_dict["crowns"] + ", donations = " + user_dict["donations"])
         if user_dict:
@@ -355,8 +356,8 @@ def get_data_by_uids():
 
 
 def main():
-    refresh_clan()
-    time.sleep(15)
+    # refresh_clan()
+    # time.sleep(15)
     get_clan2()
     # refresh_profile("99220PPR8")
     # refresh_battles("2P0V2CCY")
