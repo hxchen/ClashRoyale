@@ -147,22 +147,14 @@ def get_clan2():
             elif j == 4:
                 user_dict["score"] = col.div.string.strip()
             elif j == 5:
-                if(col.div.string):
-                    user_dict["crowns"] = col.div.string.strip()
-                else:
-                    user_dict["crowns"] = "0"
-            elif j == 6:
                 user_dict["donations"] = col.div.string.strip()
-            elif j == 7:
-                if(col.string):
-                    user_dict["role"] = col.string.strip()
-        if user_dict["donations"] == 0 or user_dict["crowns"] == 0:
-            print("name = " + user_dict["name"] + ",crowns = " + user_dict["crowns"] + ", donations = " + user_dict["donations"])
+            elif j == 6:
+                user_dict["role"] = col.string.strip()
         if user_dict:
+            # print(user_dict)
             try:
-                sql = "INSERT INTO cr_clan_8RCCQC(pid, rank, uid, name, level, league, score, crowns, donations, role, updateTime,year,week) VALUES ('"+str(pid)+"','"+user_dict["rank"]+"','"+user_dict["uid"]+"','"+user_dict["name"]+"','"+user_dict["level"]+"','"+user_dict["league"]+"',"+user_dict["score"]+","+user_dict["crowns"]+","+user_dict["donations"]+",'"+user_dict["role"]+"','"+end_time+"',"+this_year+","+this_week+")"
-                # sql = "INSERT INTO clan_8RCCQC(pid, rank, uid, name, level, league, score, crowns, donations, role, updateTime,year,week) VALUES ('"+str(pid)+"','"+user_dict["rank"]+"','"+user_dict["uid"]+"','"+user_dict["name"]+"','"+user_dict["level"]+"','"+user_dict["league"]+"',"+user_dict["score"]+","+user_dict["crowns"]+","+user_dict["donations"]+",'"+user_dict["role"]+"','"+end_time+"',"+this_year+","+this_week+")"
-                print(sql)
+                sql = "INSERT INTO cr_clan_8RCCQC(pid, rank, uid, name, level, league, score, donations, role, updateTime,year,week) VALUES ('"+str(pid)+"','"+user_dict["rank"]+"','"+user_dict["uid"]+"','"+user_dict["name"]+"','"+user_dict["level"]+"','"+user_dict["league"]+"',"+user_dict["score"]+","+user_dict["donations"]+",'"+user_dict["role"]+"','"+end_time+"',"+this_year+","+this_week+")"
+                # print(sql)
                 cursor.execute(sql)
             except Exception as e:
                 print(e)
