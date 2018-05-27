@@ -29,7 +29,7 @@ else:
     db_name = cfg.get('pro_db','db_name')
 
 # 请求头信息参数设置
-clan_url = "https://statsroyale.com/clan/8RCCQC/war"
+clan_war_url = "https://statsroyale.com/clan/8RCCQC/war"
 clan_refresh_url = "https://statsroyale.com/clan/8RCCQC/refresh"
 
 cookie = "__cfduid=d625ab65edd3bdb904548d64e6c06fbe21493566873; XSRF-TOKEN=eyJpdiI6InlKWXkyQTFpdUpPTjlcL294S3dzNjJnPT0iLCJ2YWx1ZSI6InJCS1dIVzJkTG1Dbzk2eWxYRWRKZVpCZjdzVndXNEtWdUtpalVZaSswaW1uVG43Nk51bVwvR0hRK0pVanlPVmc2eGo1YjZVbXJLZnBcL1hhNFZJcFltNXc9PSIsIm1hYyI6Ijk2ZGViZDc1ZDg3MmU1YTIzMzYxYmVkYzFhY2NmOTZkMmU5ODI1ZjFkYmYzYWQ2NDZhODhhMTBhM2I5NDk4ZjgifQ%3D%3D; laravel_session=eyJpdiI6Ino0bWRNZGVTSXdXOWZRcnh6aU5Ob0E9PSIsInZhbHVlIjoidjJ5aVkyT1ZDVjg5bFhHMlQ2cmdjTVhWV2xkY2grUG96dEZnaXRtdGhpYmo1SlwvSENXNTVvMmZDRndReExON3l0TWJoZmxqQWdLbk4xdDZpMTdBbnNRPT0iLCJtYWMiOiJlNjBiMTEyMzE4NzE3Nzc3NzJiZDhiYjAwYTlmNjE2MjI2YzUxYmNlMzgxODI0ZTJhOTc1ODhiNWQ4NWFlYzdjIn0%3D"
@@ -75,11 +75,23 @@ def refresh_clan():
 def get_war():
     start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print("fetch war data start at "+start_time)
-    req = get_header(clan_url)
+    req = get_header(clan_war_url)
     response = urllib.request.urlopen(req).read().decode("utf-8")
     end_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print("fetch war data end at "+end_time)
     soup = BeautifulSoup(response,"html.parser")
+
+    day_type = "0 Day"
+    participating = 0
+
+    for value in soup.find_all("div",{"class":"ui__headerSmall clan__warState"}):
+        day_type = value.get_text().strip()
+
+    for value in soup.find_all("div",{"class":"ui__mediumText clan__warRemainingTime"}):
+        participating = value.get_text().strip()
+    participating = participating.replace("Participating: ","")
+    db = pymysql.connect(db_host,db_user,db_password,db_name,charset="utf8")
+    cursor = db.cursor()
     for i, row in enumerate(soup.findAll("div",attrs = {"class":"clanParticipants__rowContainer"})):
         user_dict = {}
         for j,col in enumerate(row.findAll("div",attrs = {"class":"clanParticipants__row"})):
@@ -96,7 +108,20 @@ def get_war():
                 user_dict["wins"] = col.get_text()
             elif j == 4:
                 user_dict["clan_cards"] = col.get_text()
-        print(user_dict)
+        if user_dict:
+            try:
+                sql = "INSERT INTO cr_clan_8RCCQC_war(day_type, participating, rank, uid, name, battles, wins, clan_cards, updateTime) VALUES ('"+day_type+"','"+participating+"','"+user_dict["rank"]+"','"+user_dict["uid"]+"','"+user_dict["name"]+"','"+user_dict["battles"]+"','"+user_dict["wins"]+"','"+user_dict["clan_cards"]+"','"+end_time+"')"
+                # print(sql)
+                cursor.execute(sql)
+            except Exception as e:
+                print(e)
+    try:
+        db.commit()
+    except Exception as e:
+        print(e)
+        db.rollback()
+    finally:
+        db.close()
 
 
 def main():
