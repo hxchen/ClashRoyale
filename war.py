@@ -125,6 +125,8 @@ def get_war():
 
 
 def main():
+    refresh_clan()
+    time.sleep(15)
     get_war()
 
 
