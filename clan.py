@@ -13,8 +13,8 @@ cfg.read('config.ini')
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #   服务器 false ;本地 true
-debug_model = False
-# debug_model = True
+# debug_model = False
+debug_model = True
 
 if(debug_model):
     db_host = cfg.get('test_db','db_host')
@@ -262,11 +262,21 @@ def analytics_profile(id,has_info):
     # STATS ROYALE
     # print("*******************STATS ROYALE*******************")
     trophies = soup.find_all(attrs={"class": "statistics__subheader statistics__matchesCaption"})
-    next_siblings = trophies[0].find_next_siblings(limit=5)
+    next_siblings = trophies[0].find_next_siblings(limit=4)
     for value in next_siblings:
         description = value.contents[1].get_text().lower().replace(" ","_")
         content = value.contents[5].get_text()
         # print(description+", " + content)
+        profile_list[description] = content
+
+    # CLAN WAR STATS
+    # print("*******************CLAN WAR STATS*******************")
+    trophies = soup.find_all(attrs={"class": "statistics__subheader statistics__clanwarCaption"})
+    next_siblings = trophies[0].find_next_siblings(limit=2)
+    for value in next_siblings:
+        description = value.contents[1].get_text().lower().replace(" ","_")
+        content = value.contents[5].get_text()
+        print(description+", " + content)
         profile_list[description] = content
 
     # TOURNAMENT STATS
@@ -353,7 +363,7 @@ def main():
     get_clan2()
     # refresh_profile("99220PPR8")
     # refresh_battles("2P0V2CCY")
-    # analytics_profile("99220PPR8",0)
+    # analytics_profile("2LQYLYJQ",0)
     # get_data_by_uids()
 main()
 
