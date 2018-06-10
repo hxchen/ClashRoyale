@@ -351,6 +351,10 @@ def analytics_profile(id,has_info):
         db.close()
 
 
+def get_battles():
+    print("fetch battles")
+
+
 def get_data_by_uids():
     profile_list = ['2LQYLYJQ', '9U8QLY9V', '2P0V2CCY', '9PLUY020', '20PGL82J8', '20RRU0LJ2', 'Q0R0YQVC', '8RLQJQRR', 'U2R2LGR2', '8Q2J8LVP', 'LCP9CL8C', 'PL9VU80U', 'U22L0GGQ', 'QQUV9RR9', '2L9UPJP0', '9YC2LUPR', 'UG8JCJ8C', 'QY2Y9R0J', 'GPGLJ0C', '92Q29R0U', 'QGVYJCYG', '22GUQYV8Y', 'UPPGLURG', '2L29R2V8', 'JUGJ88GP', '80GUU0U2', 'Y8CJQGVR', 'J9UPRG29', '8VCLUVLY', '8890PLQV', '2PLQQLPC', '822CJCU0G', '28JR0VPP9', '2JRCC2LY9', '2229LG9PG', '2JGJYG8UQ', '20QJRYC2Q', '2RVPUG2P', '82UPP8PPR', 'UJQP9LG9', '2Y2P9QC9L', '2JJ9G00JR']
     for profile_id_twice in profile_list:
